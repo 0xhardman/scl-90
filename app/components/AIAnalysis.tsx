@@ -23,9 +23,16 @@ export default function AIAnalysis({ results, gsi, psdi, pst }: AIAnalysisProps)
 
   // 从本地存储加载 API key
   useEffect(() => {
+    // 先检查本地存储
     const savedApiKey = localStorage.getItem('deepseek_api_key');
     if (savedApiKey) {
       setApiKey(savedApiKey);
+    } else {
+      // 如果本地没有，使用环境变量中的默认值
+      const defaultApiKey = process.env.NEXT_PUBLIC_DEEPSEEK_API_KEY;
+      if (defaultApiKey) {
+        setApiKey(defaultApiKey);
+      }
     }
   }, []);
 
@@ -153,7 +160,7 @@ ${Object.entries(results)
               获取密钥
             </a>
           </div>
-          <p className="text-xs text-gray-500 mt-1">您的 API 密钥仅存储在您的浏览器中，不会发送到我们的服务器。</p>
+          <p className="text-xs text-gray-500 mt-1">您的 API 密钥仅存储在您的浏览器中，不会发送到我们的服务器。{process.env.NEXT_PUBLIC_DEEPSEEK_API_KEY ? '如果您没有设置自己的 API 密钥，将使用系统默认密钥。' : ''}</p>
         </div>
       )}
       
