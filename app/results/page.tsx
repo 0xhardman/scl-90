@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useTest } from '../context/TestContext';
 import { resultInterpretation, Dimension, questions } from '../data/questions';
@@ -16,7 +16,8 @@ type Results = {
   [key: string]: number;
 };
 
-export default function ResultsPage() {
+// 包含使用useSearchParams的实际内容组件
+function ResultsContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { answers: contextAnswers, isCompleted, calculateResults, resetTest } = useTest();
@@ -320,5 +321,19 @@ export default function ResultsPage() {
         </div>
       )}
     </div>
+  );
+}
+
+// 使用Suspense包裹的外层组件
+export default function ResultsPage() {
+  return (
+    <Suspense fallback={<div className="container mx-auto px-4 py-8 max-w-3xl">
+      <h1 className="text-2xl font-bold mb-6 text-center">SCL-90 测试结果</h1>
+      <div className="text-center py-12">
+        <p className="text-xl mb-4">正在加载结果...</p>
+      </div>
+    </div>}>
+      <ResultsContent />
+    </Suspense>
   );
 }
