@@ -2,7 +2,6 @@
 
 import React, { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
 
 type AIAnalysisProps = {
   results: Record<string, number>;
@@ -91,28 +90,29 @@ export default function AIAnalysis({ results, gsi, psdi, pst }: AIAnalysisProps)
               </button>
             </div>
           ) : (
-            <div className="bg-gray-50 p-6 rounded-lg border border-gray-200">
-              <div className="flex justify-between items-center mb-4">
-                <h3 className="font-medium text-lg">AI 分析结果</h3>
+            <div>
+              <div className="flex justify-end mb-2">
                 <button
                   onClick={() => {
                     navigator.clipboard.writeText(analysis)
-                      .then(() => alert('AI 分析结果已复制到剪贴板'))
+                      .then(() => alert('分析建议已复制到剪贴板'))
                       .catch(err => console.error('复制失败:', err));
                   }}
-                  className="px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 transition-colors flex items-center"
+                  className="text-sm px-3 py-1 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition-colors flex items-center"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
                   </svg>
-                  复制分析结果
+                  复制分析建议
                 </button>
               </div>
               
-              <div className="text-gray-700 prose prose-sm max-w-none">
-                <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                  {analysis}
-                </ReactMarkdown>
+              <div className="prose prose-sm max-w-none bg-white p-4 rounded-lg border border-gray-200">
+                <div className="text-gray-700">
+                  <ReactMarkdown>
+                    {analysis}
+                  </ReactMarkdown>
+                </div>
               </div>
             </div>
           )}
