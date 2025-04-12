@@ -28,9 +28,9 @@ export async function POST(request: NextRequest) {
 
 各维度得分：
 ${Object.entries(results)
-  .filter(([dimension]) => dimension !== '其他')
-  .map(([dimension, score]) => `- ${dimension}: ${score}`)
-  .join('\n')}
+        .filter(([dimension]) => dimension !== '其他')
+        .map(([dimension, score]) => `- ${dimension}: ${score}`)
+        .join('\n')}
 
 请提供以下内容：
 1. 整体心理健康状况分析
