@@ -1,7 +1,9 @@
 "use client";
 
 import React, { useState } from 'react';
-import ReactMarkdown from 'react-markdown';
+import { MDXRemote, MDXRemoteSerializeResult } from 'next-mdx-remote';
+import { serialize } from 'next-mdx-remote/serialize';
+import styles from './mdx.module.css';
 
 type AIAnalysisProps = {
   results: Record<string, number>;
@@ -12,6 +14,7 @@ type AIAnalysisProps = {
 
 export default function AIAnalysis({ results, gsi, psdi, pst }: AIAnalysisProps) {
   const [analysis, setAnalysis] = useState<string>('');
+  const [mdxSource, setMdxSource] = useState<MDXRemoteSerializeResult | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
   const [showAnalysis, setShowAnalysis] = useState<boolean>(false);
@@ -44,6 +47,8 @@ export default function AIAnalysis({ results, gsi, psdi, pst }: AIAnalysisProps)
       }
 
       setAnalysis(data.analysis);
+      const mdxSource = await serialize(data.analysis);
+      setMdxSource(mdxSource);
     } catch (err: unknown) {
       const errorMessage = err instanceof Error ? err.message : '获取 AI 分析时出错';
       setError(errorMessage);
@@ -107,11 +112,13 @@ export default function AIAnalysis({ results, gsi, psdi, pst }: AIAnalysisProps)
                 </button>
               </div>
               
-              <div className="prose prose-sm max-w-none bg-white p-4 rounded-lg border border-gray-200">
-                <div className="text-gray-700">
-                  <ReactMarkdown>
-                    {analysis}
-                  </ReactMarkdown>
+              <div className="max-w-none bg-white p-4 rounded-lg border border-gray-200">
+                <div className={styles.mdxContent}>
+                  {mdxSource ? (
+                    <MDXRemote {...mdxSource} />
+                  ) : (
+                    <p>加载中...</p>
+                  )}
                 </div>
               </div>
             </div>
