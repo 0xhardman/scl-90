@@ -4,6 +4,7 @@ import React, { useEffect, useState, useCallback, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useTest } from '../context/TestContext';
 import { resultInterpretation, Dimension, questions } from '../data/questions';
+import AIAnalysis from '../components/AIAnalysis';
 
 // 定义答案类型
 type Answer = {
@@ -280,6 +281,9 @@ function ResultsContent() {
             </div>
           </div>
 
+          {/* AI 分析组件 */}
+          <AIAnalysis results={results} gsi={gsi} psdi={psdi} pst={pst} />
+          
           <div className="flex justify-center mt-8 space-x-4">
             <button
               onClick={handleRetakeTest}
