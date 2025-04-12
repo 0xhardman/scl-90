@@ -1,103 +1,71 @@
-import Image from "next/image";
+import Link from "next/link";
 
 export default function Home() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    <div className="container mx-auto px-4 py-8 max-w-4xl">
+      <div className="text-center mb-12">
+        <h1 className="text-4xl font-bold mb-4">SCL-90 心理健康自评量表</h1>
+        <p className="text-xl text-gray-600 mb-8">全面评估您的心理健康状况</p>
+        <Link 
+          href="/test"
+          className="inline-block px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-lg font-medium"
+        >
+          开始测试
+        </Link>
+      </div>
+      
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+        <div className="bg-white p-6 rounded-lg shadow-md">
+          <h2 className="text-2xl font-semibold mb-4">什么是SCL-90量表？</h2>
+          <p className="text-gray-600 mb-4">
+            SCL-90（症状自评量表）是一种广泛应用于心理健康评估的量表，包含90个问题，涵盖90个常见症状，分为9个维度进行评估。
+          </p>
+          <p className="text-gray-600">
+            该量表广泛应用于心理健康筛查、心理咨询和心理治疗效果评估等领域。
+          </p>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+        
+        <div className="bg-white p-6 rounded-lg shadow-md">
+          <h2 className="text-2xl font-semibold mb-4">测试包含哪些维度？</h2>
+          <ul className="list-disc pl-5 space-y-2 text-gray-600">
+            <li>躯体化（身体不适的主观体验）</li>
+            <li>强迫症状（无法控制的思想、冲动和行为）</li>
+            <li>人际关系敏感（人际交往中的不自在感）</li>
+            <li>抑郁（情绪、情感、兴趣和精力的下降）</li>
+            <li>焦虑（紧张、坐立不安和相关身体表现）</li>
+            <li>敌对（易怒、易激动等敌对情绪）</li>
+            <li>恐怖（对特定事物或场所的持续恐惧）</li>
+            <li>偏执（猜疑心、敌意和被害观念）</li>
+            <li>精神病性（从人际疏离到精神病性症状）</li>
+          </ul>
+        </div>
+      </div>
+      
+      <div className="bg-white p-6 rounded-lg shadow-md mb-12">
+        <h2 className="text-2xl font-semibold mb-4">测试说明</h2>
+        <div className="space-y-4 text-gray-600">
+          <p>本测试共有90个问题，大约需要花15-20分钟完成。</p>
+          <p>请根据您最近一周（包括今天）的实际感受，选择最符合您情况的选项。</p>
+          <p>每个问题有以下几个选项：</p>
+          <ul className="list-disc pl-5">
+            <li>没有：完全没有该症状</li>
+            <li>很轻：有一点点该症状，但不明显</li>
+            <li>中等：有该症状，稍微影响生活</li>
+            <li>偏重：症状明显，影响生活</li>
+            <li>严重：症状非常严重，严重影响生活</li>
+          </ul>
+          <p className="font-medium text-blue-600">注意：本测试结果仅供参考，不构成医学诊断。如果您有任何心理健康问题，请咨询专业的心理健康人员。</p>
+        </div>
+      </div>
+      
+      <div className="text-center">
+        <Link 
+          href="/test"
+          className="inline-block px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-lg font-medium"
         >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+          开始测试
+        </Link>
+      </div>
     </div>
   );
 }
