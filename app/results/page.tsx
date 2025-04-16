@@ -3,7 +3,7 @@
 import React, { useEffect, useState, useCallback, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useTest } from '../context/TestContext';
-import { resultInterpretation, Dimension, questions } from '../data/questions';
+import { resultInterpretation, Dimension, questions, scoreOptions } from '../data/questions';
 import AIAnalysis from '../components/AIAnalysis';
 
 // 定义答案类型
@@ -273,6 +273,93 @@ function ResultsContent() {
                     <div className="mt-3">
                       <h4 className="font-medium text-sm mb-1">个人解读：</h4>
                       <p className="text-gray-700 text-sm italic">{interpretationText || info.description}</p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* 问题与选择展示 */}
+          <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+            <h2 className="text-xl font-semibold mb-4">问题与选择详情</h2>
+            
+            {/* 维度选择器 */}
+            <div className="mb-6">
+              <div className="flex flex-wrap gap-2">
+                {Object.keys(results).map((dimension) => (
+                  <button
+                    key={dimension}
+                    onClick={() => {
+                      // 创建一个新的DOM元素，用于滚动到相应的维度部分
+                      const element = document.getElementById(`dimension-${dimension}`);
+                      if (element) {
+                        element.scrollIntoView({ behavior: 'smooth' });
+                      }
+                    }}
+                    className="px-3 py-1 text-sm bg-blue-50 hover:bg-blue-100 rounded-full transition-colors"
+                  >
+                    {dimension}
+                  </button>
+                ))}
+              </div>
+            </div>
+            
+            {/* 按维度分组显示问题 */}
+            <div className="space-y-6">
+              {Object.keys(results).map((dimension) => {
+                // 筛选出属于该维度的问题和答案
+                const dimensionAnswers = answers.filter(answer => {
+                  const question = questions.find(q => q.id === answer.questionId);
+                  return question && question.dimension === dimension;
+                });
+                
+                if (dimensionAnswers.length === 0) return null;
+                
+                return (
+                  <div key={dimension} id={`dimension-${dimension}`} className="border rounded-lg overflow-hidden">
+                    <div 
+                      className={`p-3 font-medium ${
+                        getDegree(dimension, results[dimension] as number) === '正常' ? 'bg-green-50' :
+                        getDegree(dimension, results[dimension] as number) === '轻度' ? 'bg-yellow-50' :
+                        getDegree(dimension, results[dimension] as number) === '中度' ? 'bg-orange-50' :
+                        'bg-red-50'
+                      }`}
+                    >
+                      {dimension} - {dimensionAnswers.length}个问题 
+                      <span className="text-sm ml-2">
+                        (得分: {results[dimension]}, 
+                        {getDegree(dimension, results[dimension] as number)})
+                      </span>
+                    </div>
+                    
+                    <div className="divide-y">
+                      {dimensionAnswers.map((answer) => {
+                        const question = questions.find(q => q.id === answer.questionId);
+                        const selectedOption = answer.score > 0 ? 
+                          scoreOptions.find((option: { value: number; label: string }) => option.value === answer.score) : null;
+                        
+                        if (!question) return null;
+                        
+                        return (
+                          <div key={question.id} className="p-3 hover:bg-gray-50">
+                            <div className="flex justify-between items-start">
+                              <p className="text-gray-800">
+                                <span className="font-medium">问题 {question.id}:</span> {question.text}
+                              </p>
+                              <span className={`ml-2 px-2 py-1 rounded-full text-xs whitespace-nowrap ${
+                                answer.score === 1 ? 'bg-green-100 text-green-800' :
+                                answer.score === 2 ? 'bg-blue-100 text-blue-800' :
+                                answer.score === 3 ? 'bg-yellow-100 text-yellow-800' :
+                                answer.score === 4 ? 'bg-orange-100 text-orange-800' :
+                                'bg-red-100 text-red-800'
+                              }`}>
+                                {selectedOption?.label || '未选择'} ({answer.score})
+                              </span>
+                            </div>
+                          </div>
+                        );
+                      })}
                     </div>
                   </div>
                 );
