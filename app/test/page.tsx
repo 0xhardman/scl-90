@@ -27,7 +27,13 @@ export default function TestPage() {
       nextPage();
     } else if (allQuestionsAnswered) {
       completeTest();
-      router.push('/results');
+      // 直接使用原始的答案数据传递到结果页面
+      // 创建URL参数，将答案数据编码并传递
+      const scoresArray = answers.map(a => a.score);
+      const encodedScores = encodeURIComponent(JSON.stringify(scoresArray));
+      
+      // 跳转到结果页面并携带数据
+      router.push(`/results?scores=${encodedScores}`);
     }
   };
 

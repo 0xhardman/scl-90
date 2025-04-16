@@ -22,12 +22,12 @@ function ResultsContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { answers: contextAnswers, isCompleted, calculateResults, resetTest } = useTest();
-  
+
   // 状态管理
   const [answers, setAnswers] = useState<Answer[]>(contextAnswers);
   const [results, setResults] = useState<Results>({});
   const [isUrlMode, setIsUrlMode] = useState(false);
-  
+
   // 使用useCallback包裹计算函数，避免依赖项问题
   const calculateResultsFromAnswers = useCallback((answersList: Answer[]): Results => {
     const dimensionScores: Results = {
@@ -52,17 +52,17 @@ function ResultsContent() {
 
     return dimensionScores;
   }, []);
-  
+
   useEffect(() => {
     // 检查URL参数是否包含测试数据
     const testDataParam = searchParams.get('scores');
-    
+
     if (testDataParam) {
       try {
         // 解析URL参数中的测试数据
         const decodedData = decodeURIComponent(testDataParam);
         const scoreArray = JSON.parse(decodedData);
-        
+
         // 验证数据格式
         if (Array.isArray(scoreArray) && scoreArray.length > 0) {
           // 将简单数组转换为答案对象数组
@@ -70,10 +70,10 @@ function ResultsContent() {
             questionId: index + 1, // 问题ID从1开始
             score: Number(score)   // 确保分数是数字
           }));
-          
+
           setAnswers(formattedAnswers);
           setIsUrlMode(true);
-          
+
           // 手动计算结果
           const calculatedResults = calculateResultsFromAnswers(formattedAnswers);
           setResults(calculatedResults);
@@ -88,11 +88,11 @@ function ResultsContent() {
         try {
           const decodedData = decodeURIComponent(oldFormatParam);
           const parsedAnswers = JSON.parse(decodedData);
-          
+
           if (Array.isArray(parsedAnswers) && parsedAnswers.length > 0) {
             setAnswers(parsedAnswers);
             setIsUrlMode(true);
-            
+
             const calculatedResults = calculateResultsFromAnswers(parsedAnswers);
             setResults(calculatedResults);
           }
@@ -231,13 +231,13 @@ function ResultsContent() {
                 // 安全地断言维度类型
                 const dim = dimension as keyof typeof resultInterpretation;
                 if (dim === '其他' as Dimension) return null;
-                
+
                 // 获取该维度的得分
                 const score = results[dimension as keyof typeof results] as number;
-                
+
                 // 确定程度
                 const degree = getDegree(dimension, score);
-                
+
                 // 根据程度选择相应的解读
                 let interpretationText = '';
                 if (degree === '正常') {
@@ -249,24 +249,23 @@ function ResultsContent() {
                 } else if (degree === '重度') {
                   interpretationText = info.severeInterpretation;
                 }
-                
+
                 // 根据程度设置不同的颜色
-                const degreeColorClass = 
+                const degreeColorClass =
                   degree === '正常' ? 'bg-green-50 border-green-200' :
-                  degree === '轻度' ? 'bg-yellow-50 border-yellow-200' :
-                  degree === '中度' ? 'bg-orange-50 border-orange-200' :
-                  'bg-red-50 border-red-200';
-                
+                    degree === '轻度' ? 'bg-yellow-50 border-yellow-200' :
+                      degree === '中度' ? 'bg-orange-50 border-orange-200' :
+                        'bg-red-50 border-red-200';
+
                 return (
                   <div key={dimension} className={`border-b pb-4 ${degreeColorClass} p-4 rounded-lg`}>
                     <div className="flex justify-between items-center mb-2">
                       <h3 className="font-medium text-lg">{dimension}</h3>
-                      <span className={`px-2 py-1 rounded-full text-xs ${
-                        degree === '正常' ? 'bg-green-100 text-green-800' :
-                        degree === '轻度' ? 'bg-yellow-100 text-yellow-800' :
-                        degree === '中度' ? 'bg-orange-100 text-orange-800' :
-                        'bg-red-100 text-red-800'
-                      }`}>
+                      <span className={`px-2 py-1 rounded-full text-xs ${degree === '正常' ? 'bg-green-100 text-green-800' :
+                          degree === '轻度' ? 'bg-yellow-100 text-yellow-800' :
+                            degree === '中度' ? 'bg-orange-100 text-orange-800' :
+                              'bg-red-100 text-red-800'
+                        }`}>
                         {degree}
                       </span>
                     </div>
@@ -283,7 +282,7 @@ function ResultsContent() {
 
           {/* AI 分析组件 */}
           <AIAnalysis results={results} gsi={gsi} psdi={psdi} pst={pst} />
-          
+
           <div className="flex justify-center mt-8 space-x-4">
             <button
               onClick={handleRetakeTest}
@@ -291,26 +290,26 @@ function ResultsContent() {
             >
               重新测试
             </button>
-            
-            {isUrlMode && (
-              <button
-                onClick={() => {
-                  // 生成简化的分数数组
-                  const scoresArray = answers.map(a => a.score);
-                  const scoresJson = JSON.stringify(scoresArray);
-                  const encodedData = encodeURIComponent(scoresJson);
-                  const shareUrl = `${window.location.origin}/results?scores=${encodedData}`;
-                  
-                  // 复制到剪贴板
-                  navigator.clipboard.writeText(shareUrl)
-                    .then(() => alert('结果链接已复制到剪贴板'))
-                    .catch(err => console.error('复制失败:', err));
-                }}
-                className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
-              >
-                复制结果链接
-              </button>
-            )}
+
+
+            <button
+              onClick={() => {
+                // 生成简化的分数数组
+                const scoresArray = answers.map(a => a.score);
+                const scoresJson = JSON.stringify(scoresArray);
+                const encodedData = encodeURIComponent(scoresJson);
+                const shareUrl = `${window.location.origin}/results?scores=${encodedData}`;
+
+                // 复制到剪贴板
+                navigator.clipboard.writeText(shareUrl)
+                  .then(() => alert('结果链接已复制到剪贴板'))
+                  .catch(err => console.error('复制失败:', err));
+              }}
+              className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+            >
+              复制结果链接
+            </button>
+
           </div>
         </>
       ) : (
