@@ -1,0 +1,18 @@
+[build]
+  builder = "nixpacks"
+  buildCommand = "npm run build"
+
+[deploy]
+  startCommand = "npm start"
+  healthcheckPath = "/"
+  healthcheckTimeout = 100
+  restartPolicyType = "on_failure"
+
+[nixpacks]
+  features = ["nodejs"]
+
+[variables]
+  NODE_ENV = "production"
+  PORT = "3000"
+  # You'll need to set this value in Railway's dashboard
+  NEXT_PUBLIC_DEEPSEEK_API_KEY = "${{NEXT_PUBLIC_DEEPSEEK_API_KEY}}"
